@@ -1,23 +1,14 @@
 $(document).ready(() => {
-    
-    let tags = []
-    $('input:checked').change(e => { 
-        e.preventDefault()
+    $('input[type=checkbox]').click((e) => { 
         
-
-        const id = $(this).attr('data-id')
-        const name = $(this).attr('data-name')
-
-        const tag = {id: id, name: name}
-        tags.push(tag)
-
-        let str = ''
-        for (const item of tags) {
-            str += `${item},`
+        let tags = []
+        for (const inp of $('input[type=checkbox]:checked')) {
+            const name = $(inp).attr('data-name');
+            tags.push(name)
+            $('.amenities h4').text(tags.toString())
         }
-
-        $('.amenities h4').html(str)
-    })
-
-
+        if (tags.length == 0) {
+            $('.amenities h4').html("&nbsp;")
+        }
+    });
 });
