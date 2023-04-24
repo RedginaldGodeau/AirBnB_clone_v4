@@ -1,7 +1,7 @@
 $(document).ready(() => {
     $('input[type=checkbox]').click((e) => { 
         
-        let tags = []
+        const tags = []
         for (const inp of $('input[type=checkbox]:checked')) {
             const name = $(inp).attr('data-name');
             tags.push(name)

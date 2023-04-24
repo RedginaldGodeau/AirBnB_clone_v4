@@ -78,6 +78,14 @@ button:hover {
     margin: 0px;
 }
 
+.amenities input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.amenities label {
+    display: inline-block;
+}
+
 .locations .popover {
     margin-top: 0%;
 }
