@@ -19,43 +19,65 @@ $(document).ready(() => {
           </div>
   </article>`
   
-  const filterAjax = (id) => {
-    console.log(id)
-    $.ajax({
-      type: "POST",
-      url: "http://localhost:5003/api/v1/places_search/",
-      contentType: "application/json",
-      data: '{"places": ' +  `"[${id}]"` + '}',
-      success: (result) => {
-        $("section.places").html(" ")
-        
-        for (place of result) {
-          $("section.places").append(createElement(place))
+  const filterAjax = (Place_Amenities, obj=null) => {
+    console.log(obj)
+    if (!obj){
+      $.ajax({
+        type: "POST",
+        url: "http://localhost:5001/api/v1/places_search/",
+        contentType: "application/json",
+        data: '{}',
+        success: (result) => {
+          $("section.places").html(" ")
+          console.log(result)
+          for (place of result) {
+            $("section.places").append(createElement(place))
+          }
         }
-      }
-    });
+      });
+    }
+    if (Place_Amenities == "amenities" && obj != null){
+      $.ajax({
+        type: "POST",
+        url: "http://localhost:5001/api/v1/places_search/",
+        contentType: "application/json",
+        data: JSON.stringify(obj),
+        success: (result) => {
+          $("section.places").html(" ")
+          console.log(result)
+          for (place of result) {
+            $("section.places").append(createElement(place))
+          }
+        }
+      });
+    }
   }
 
   $('input[type=checkbox]').click((e) => { 
     const ids = []
     const tags = []
+    const obj = {}
     for (const inp of $('input[type=checkbox]:checked')) {
         const name = $(inp).attr('data-name');
         const id = $(inp).attr('data-id');
 
         ids.push(id);
         tags.push(name)
-        
+        obj.amenities = ids
+
         $('.amenities h4').text(tags.toString())
     }
     if (tags.length == 0) {
         $('.amenities h4').html("&nbsp;")
+        filterAjax("places")
+
+    } else {
+      filterAjax("amenities", obj)
     }
-    filterAjax(ids)
 });
   $.ajax({
     type: "POST",
-    url: "http://localhost:5003/api/v1/places_search/",
+    url: "http://localhost:5001/api/v1/places_search/",
     contentType: "application/json",
     data: '{}',
     success: (result) => {
@@ -67,7 +89,7 @@ $(document).ready(() => {
 
 
   $.ajax(
-    {url:'http://localhost:5003/api/v1/status/', success: (result) => {
+    {url:'http://localhost:5001/api/v1/status/', success: (result) => {
       if (result.status == "OK") {
         $("div#api_status").addClass("available")
       } else {
